@@ -1,9 +1,10 @@
 package com.github.eirslett.maven.plugins.frontend.lib;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface WebpackRunner {
-    void execute(String args) throws TaskRunnerException;
+    void execute(String args, Map<String, String> environment) throws TaskRunnerException;
 }
 
 final class DefaultWebpackRunner extends NodeTaskExecutor implements WebpackRunner {

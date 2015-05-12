@@ -10,6 +10,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.Map;
 
 @Mojo(name="jspm",  defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class JspmMojo extends AbstractFrontendMojo {
@@ -26,6 +27,12 @@ public class JspmMojo extends AbstractFrontendMojo {
     @Parameter(property = "skip.jspm", defaultValue = "false")
     private Boolean skip;
 
+    /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
+
     @Override
     protected boolean isSkipped() {
         return this.skip;
@@ -33,7 +40,7 @@ public class JspmMojo extends AbstractFrontendMojo {
 
     @Override
     protected void execute(FrontendPluginFactory factory) throws TaskRunnerException {
-        factory.getJspmRunner().execute(arguments);
+        factory.getJspmRunner().execute(arguments, environmentVariables);
     }
 
 }

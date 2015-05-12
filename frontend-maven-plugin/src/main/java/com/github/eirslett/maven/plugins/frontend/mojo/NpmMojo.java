@@ -3,6 +3,7 @@ package com.github.eirslett.maven.plugins.frontend.mojo;
 import com.github.eirslett.maven.plugins.frontend.lib.FrontendPluginFactory;
 import com.github.eirslett.maven.plugins.frontend.lib.ProxyConfig;
 import com.github.eirslett.maven.plugins.frontend.lib.TaskRunnerException;
+
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -12,6 +13,7 @@ import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 import java.io.File;
+import java.util.Map;
 
 @Mojo(name="npm",  defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public final class NpmMojo extends AbstractFrontendMojo {
@@ -21,6 +23,12 @@ public final class NpmMojo extends AbstractFrontendMojo {
      */
     @Parameter(defaultValue = "install", property = "frontend.npm.arguments", required = false)
     private String arguments;
+
+    /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
 
     @Parameter(property = "session", defaultValue = "${session}", readonly = true)
     private MavenSession session;
@@ -47,7 +55,7 @@ public final class NpmMojo extends AbstractFrontendMojo {
         File packageJson = new File(workingDirectory, "package.json");
         if (buildContext == null || buildContext.hasDelta(packageJson) || !buildContext.isIncremental()) {
             ProxyConfig proxyConfig = MojoUtils.getProxyConfig(session, decrypter);
-            factory.getNpmRunner(proxyConfig).execute(arguments);
+            factory.getNpmRunner(proxyConfig).execute(arguments, environmentVariables);
         } else {
             getLog().info("Skipping npm install as package.json unchanged");
         }

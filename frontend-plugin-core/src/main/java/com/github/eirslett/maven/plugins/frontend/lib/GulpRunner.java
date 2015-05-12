@@ -1,9 +1,10 @@
 package com.github.eirslett.maven.plugins.frontend.lib;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public interface GulpRunner {
-    void execute(String args) throws TaskRunnerException;
+    public void execute(String args, Map<String, String> environment) throws TaskRunnerException;
 }
 
 final class DefaultGulpRunner extends NodeTaskExecutor implements GulpRunner {

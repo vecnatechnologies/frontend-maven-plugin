@@ -11,6 +11,7 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Mojo(name="gulp", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public final class GulpMojo extends AbstractFrontendMojo {
@@ -45,6 +46,12 @@ public final class GulpMojo extends AbstractFrontendMojo {
     private File outputdir;
 
     /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
+
+    /**
      * Skips execution of this mojo.
      */
     @Parameter(property = "skip.gulp", defaultValue = "false")
@@ -61,7 +68,7 @@ public final class GulpMojo extends AbstractFrontendMojo {
     @Override
     public void execute(FrontendPluginFactory factory) throws TaskRunnerException {
         if (shouldExecute()) {
-            factory.getGulpRunner().execute(arguments);
+            factory.getGulpRunner().execute(arguments, environmentVariables);
 
             if (outputdir != null) {
                 getLog().info("Refreshing files after gulp: " + outputdir);

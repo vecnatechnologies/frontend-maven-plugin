@@ -1,7 +1,9 @@
 package com.github.eirslett.maven.plugins.frontend.lib;
 
+import java.util.Map;
+
 public interface EmberRunner {
-    void execute(String args) throws TaskRunnerException;
+    public void execute(String args, Map<String, String> environment) throws TaskRunnerException;
 }
 
 final class DefaultEmberRunner extends NodeTaskExecutor implements EmberRunner {

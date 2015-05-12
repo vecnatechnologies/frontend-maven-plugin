@@ -2,9 +2,10 @@ package com.github.eirslett.maven.plugins.frontend.lib;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface NpmRunner {
-    void execute(String args) throws TaskRunnerException;
+    public void execute(String args, Map<String, String> environment) throws TaskRunnerException;
 }
 
 final class DefaultNpmRunner extends NodeTaskExecutor implements NpmRunner {

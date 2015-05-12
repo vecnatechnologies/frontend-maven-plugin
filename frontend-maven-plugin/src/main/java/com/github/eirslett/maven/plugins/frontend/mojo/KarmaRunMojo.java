@@ -1,7 +1,13 @@
 package com.github.eirslett.maven.plugins.frontend.mojo;
 
+import java.util.Map;
+
 import com.github.eirslett.maven.plugins.frontend.lib.FrontendPluginFactory;
 import com.github.eirslett.maven.plugins.frontend.lib.TaskRunnerException;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -30,6 +36,12 @@ public final class KarmaRunMojo extends AbstractFrontendMojo {
     private Boolean testFailureIgnore;
 
     /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
+
+    /**
      * Skips execution of this mojo.
      */
     @Parameter(property = "skip.karma", defaultValue = "false")
@@ -47,7 +59,7 @@ public final class KarmaRunMojo extends AbstractFrontendMojo {
                 LoggerFactory.getLogger(KarmaRunMojo.class).info("Skipping karma tests.");
             }
             else {
-                factory.getKarmaRunner().execute("start " + karmaConfPath);
+                factory.getKarmaRunner().execute("start " + karmaConfPath, environmentVariables);
             }
         }
         catch (TaskRunnerException e) {

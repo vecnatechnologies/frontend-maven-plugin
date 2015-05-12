@@ -6,6 +6,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.io.File;
+import java.util.Map;
+
 @Mojo(name = "bower", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public final class BowerMojo extends AbstractFrontendMojo {
 
@@ -14,6 +17,12 @@ public final class BowerMojo extends AbstractFrontendMojo {
      */
     @Parameter(defaultValue = "install", property = "frontend.bower.arguments", required = false)
     private String arguments;
+
+    /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
 
     /**
      * Skips execution of this mojo.
@@ -28,6 +37,6 @@ public final class BowerMojo extends AbstractFrontendMojo {
 
     @Override
     protected void execute(FrontendPluginFactory factory) throws TaskRunnerException {
-        factory.getBowerRunner().execute(arguments);
+        factory.getBowerRunner().execute(arguments, environmentVariables);
     }
 }

@@ -11,6 +11,7 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Mojo(name="webpack", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public final class WebpackMojo extends AbstractFrontendMojo {
@@ -53,6 +54,12 @@ public final class WebpackMojo extends AbstractFrontendMojo {
     @Component
     private BuildContext buildContext;
 
+    /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
+
     @Override
     protected boolean isSkipped() {
         return this.skip;
@@ -61,7 +68,7 @@ public final class WebpackMojo extends AbstractFrontendMojo {
     @Override
     public void execute(FrontendPluginFactory factory) throws TaskRunnerException {
         if (shouldExecute()) {
-            factory.getWebpackRunner().execute(arguments);
+            factory.getWebpackRunner().execute(arguments, environmentVariables);
 
             if (outputdir != null) {
                 getLog().info("Refreshing files after webpack: " + outputdir);

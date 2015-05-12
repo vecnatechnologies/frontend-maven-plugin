@@ -2,6 +2,12 @@ package com.github.eirslett.maven.plugins.frontend.mojo;
 
 import com.github.eirslett.maven.plugins.frontend.lib.FrontendPluginFactory;
 import com.github.eirslett.maven.plugins.frontend.lib.TaskRunnerException;
+
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -11,6 +17,7 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Mojo(name="grunt", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public final class GruntMojo extends AbstractFrontendMojo {
@@ -45,6 +52,12 @@ public final class GruntMojo extends AbstractFrontendMojo {
     private File outputdir;
 
     /**
+     * Additional environment variables to pass to the build.
+     */
+    @Parameter
+    private Map<String, String> environmentVariables;
+
+    /**
      * Skips execution of this mojo.
      */
     @Parameter(property = "skip.grunt", defaultValue = "false")
@@ -61,7 +74,7 @@ public final class GruntMojo extends AbstractFrontendMojo {
     @Override
     public void execute(FrontendPluginFactory factory) throws TaskRunnerException {
         if (shouldExecute()) {
-            factory.getGruntRunner().execute(arguments);
+            factory.getGruntRunner().execute(arguments, environmentVariables);
 
             if (outputdir != null) {
                 getLog().info("Refreshing files after grunt: " + outputdir);

@@ -1,9 +1,10 @@
 package com.github.eirslett.maven.plugins.frontend.lib;
 
-public interface JspmRunner {
-    void execute(String args) throws TaskRunnerException;
-}
+import java.util.Map;
 
+public interface JspmRunner {
+    void execute(String args, Map<String, String> environment) throws TaskRunnerException;
+}
 
 final class DefaultJspmRunner extends NodeTaskExecutor implements JspmRunner {
 
